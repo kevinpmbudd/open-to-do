@@ -9,7 +9,7 @@ RSpec.describe Api::UsersController, type: :controller do
   end
 
   describe "GET index" do
-    it "returns https success" do
+    it "returns http success" do
       get :index
       json = JSON.parse(response.body)
       expect(response).to be_success
@@ -18,8 +18,13 @@ RSpec.describe Api::UsersController, type: :controller do
     it "returns list of users" do
       get :index
       json = JSON.parse(response.body)
-      puts json[0]
-      expect(json[0]["email"]).to eq user.email
+      expect(json["users"][0]["email"]).to eq user.email
+    end
+  end
+
+  describe "POST create" do
+    it "adds one user to the Users" do
+      expect{ post :create, params: { user: { name: "New_User", email: "new_user@open_to_do.com", password: "password" } } }.to change(User,:count).by(1)
     end
   end
 end
