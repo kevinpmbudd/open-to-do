@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::UsersController, type: :controller do
-  let(:user) { create(:user) }
+  let(:user) { create (:user) }
 
   include AuthHelper
   before(:each) do
@@ -25,6 +25,14 @@ RSpec.describe Api::UsersController, type: :controller do
   describe "POST create" do
     it "adds one user to the Users" do
       expect{ post :create, params: { user: { name: "New_User", email: "new_user@open_to_do.com", password: "password" } } }.to change(User,:count).by(1)
+    end
+  end
+
+  describe "DELETE destroy" do
+    it "removes a user from Users" do
+      user_2 = create(:user, name: "me_too_?")
+      delete :destroy, params: { id: user_2.id }
+      expect(User.count).to eq 1
     end
   end
 end

@@ -14,4 +14,12 @@ RSpec.describe Api::ListsController, type: :controller do
     end
   end
 
+  describe "DELETE destroy" do
+    it "removes a list from Lists" do
+      list = create(:list, title: "list one title", user: user)
+      delete :destroy, params: { user_id: user.id, id: list.id }
+      expect(List.count).to eq 0
+    end
+  end
+
 end
