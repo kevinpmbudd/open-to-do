@@ -1,4 +1,7 @@
 require 'rails_helper'
+require 'database_cleaner'
+
+DatabaseCleaner.strategy = :truncation
 
 RSpec.describe Api::ListsController, type: :controller do
   let(:user) { create(:user) }
@@ -11,6 +14,18 @@ RSpec.describe Api::ListsController, type: :controller do
   describe "POST create" do
     it "adds one list to the Lists" do
       expect{ post :create, params: { user_id: user.id, list: { title: "New_Title", private: false} } }.to change(List,:count).by(1)
+    end
+  end
+
+  describe "PUT update" do
+    it "updates list with expected attributes" do
+      DatabaseCleaner.clean
+      list = create(:list, title: "new_list")
+      expect(list.private).to be_falsey
+
+      put :update, params: { user_id: user.id, id: list.id, list: { private: true } }
+      list.reload
+      expect(list.private).to be_truthy
     end
   end
 

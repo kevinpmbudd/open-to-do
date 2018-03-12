@@ -21,7 +21,6 @@ users = User.all
 12.times do
   List.create!(
     title: Faker::Hipster.sentence(3),
-    private: [true, false].sample,
     user: users.sample
   )
 end

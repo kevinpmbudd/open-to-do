@@ -16,6 +16,19 @@ class Api::ListsController < ApiController
     end
   end
 
+  def update
+    list = List.find_by_id(params[:id])
+    if list.update(list_params)
+      render json: {
+        status: 200,
+        message: "Successfully updated list.",
+        list: list
+      }
+    else
+      render json: { errors: list.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     begin
       list = List.find(params[:id])
@@ -24,7 +37,7 @@ class Api::ListsController < ApiController
     rescue ActiveRecord::RecordNotFound
       render :json => {}, :status => :not_found
     end
-  end 
+  end
 
   private
 
