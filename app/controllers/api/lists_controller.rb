@@ -19,12 +19,21 @@ class Api::ListsController < ApiController
   def destroy
     begin
       list = List.find(params[:id])
-      list.destroy
-      render json: {}, status: :no_content
+      if list.destroy
+        render json: {
+          status: 200,
+          message: "List successfully deleted."
+        }
+      else
+        render json: {
+          status: 500,
+          message: "List deletion unsuccessful. Try again."
+        }
+      end
     rescue ActiveRecord::RecordNotFound
-      render :json => {}, :status => :not_found
+      render :json => { message: "List not found"}, :status => :not_found
     end
-  end 
+  end
 
   private
 
